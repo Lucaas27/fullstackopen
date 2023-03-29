@@ -8,7 +8,7 @@ In chapter [Loading a page containing JavaScript](https://fullstackopen.com/en/p
 
 ### 0.4
 
-```sequenceDiagram
+sequenceDiagram
     participant browser
     participant server
 
@@ -63,8 +63,6 @@ In chapter [Loading a page containing JavaScript](https://fullstackopen.com/en/p
     activate server
     server-->>browser: [{ "content": "HTML is easy", "date": "2023-1-1" }, ... ]
     deactivate server
-
-```
 
 ## 0.5 Single page app
 
