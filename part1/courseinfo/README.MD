@@ -289,3 +289,42 @@ const Total = (props) => {
 export default App
 
 ```
+
+## Defining Methods in Objects
+
+We can assign methods to an object by defining properties that are functions:
+
+```javascript
+const arto = {
+  name: 'Arto Hellas',
+  age: 35,
+  education: 'PhD',
+  greet: function() {
+    console.log('hello, my name is ' + this.name)
+  },
+}
+
+arto.greet()  // "hello, my name is Arto Hellas" gets printed
+
+```
+
+Methods can be assigned to objects even after the creation of the object:
+
+```javascript
+const arto = {
+  name: 'Arto Hellas',
+  age: 35,
+  education: 'PhD',
+  greet: function() {
+    console.log('hello, my name is ' + this.name)
+  },
+}
+
+arto.growOlder = function() {
+  this.age += 1
+}
+
+console.log(arto.age)   // 35 is printed
+arto.growOlder()
+console.log(arto.age)   // 36 is printed
+```
