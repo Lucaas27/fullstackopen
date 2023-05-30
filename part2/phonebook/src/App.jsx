@@ -1,15 +1,16 @@
 import { useState } from 'react'
 
 const peopleList = [
-  {
-    id: '1',
-    name: 'John Doe',
-    number: '07758899268'
-  }
+  { id: '1', name: 'Arto Hellas', number: '040-123456' },
+  { id: '2', name: 'Ada Lovelace', number: '39-44-5323523' },
+  { id: '3', name: 'Dan Abramov', number: '12-43-234345' },
+  { id: '4' , name: 'Mary Poppendieck', number: '39-23-6423122'},
+  { id: '5', name: 'John Doe', number: '07758899268'},
 ]
 
 function App() {
   const [persons, setPersons] = useState(peopleList)
+  const [personsFilter, setPersonsFilter] = useState('')
   const [newContactObj, setNewContactObj] = useState({
     id: '',
     name:'',
@@ -42,10 +43,19 @@ function App() {
     })
 
   }
+
+  const filterHandler = (e) => {
+    const filteredPerson = persons.filter(person => person.name.includes(e.target.value))
+    setPersonsFilter(filteredPerson)
+  }
   
   return (
     <div>
       <h2>Phonebook</h2>
+      <div>
+        Search: <input type="text" onChange={filterHandler}/>
+      </div>
+      <h2>Add new contact</h2>
       <form onSubmit={submitHandler}>
         <div>
           Name: <input onChange={newContactNameHandler} value={newContactObj.name}/>
