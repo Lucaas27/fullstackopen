@@ -1,5 +1,8 @@
 import React from 'react'
 import { useState } from 'react'
+import SearchFilter from './components/SearchFilter'
+import NewContactForm from './components/NewContactForm'
+import DisplayContacts from './components/DisplayContacts'
 
 const peopleList = [
 	{ id: '1', name: 'Arto Hellas', number: '040-123456' },
@@ -58,36 +61,16 @@ function App() {
 	return (
 		<div>
 			<h2>Phonebook</h2>
-			<div>
-				Search: <input type="text" onChange={filterHandler} />
-			</div>
+			<SearchFilter filterHandler={filterHandler} />
 			<h2>Add new contact</h2>
-			<form onSubmit={submitHandler}>
-				<div>
-					Name:{' '}
-					<input onChange={newContactNameHandler} value={newContactObj.name} />
-				</div>
-				<div>
-					Number:{' '}
-					<input
-						onChange={newContactNumberHandler}
-						value={newContactObj.number}
-					/>
-				</div>
-				<div>
-					<button type="submit">Add</button>
-				</div>
-			</form>
+			<NewContactForm
+				submitHandler={submitHandler}
+				newContactNameHandler={newContactNameHandler}
+				newContactObj={newContactObj}
+				newContactNumberHandler={newContactNumberHandler}
+			/>
 			<h2>Contacts</h2>
-			{filteredPersonList.map((person) => {
-				return (
-					<div key={person.id}>
-						<p>
-							{person.name} - {person.number}
-						</p>
-					</div>
-				)
-			})}
+			<DisplayContacts filteredPersonList={filteredPersonList} />
 		</div>
 	)
 }
