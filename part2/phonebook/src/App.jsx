@@ -3,33 +3,43 @@ import { useState } from 'react'
 const peopleList = [
   {
     id: '1',
-    name: 'John Doe'
+    name: 'John Doe',
+    number: '07758899268'
   }
 ]
 
 function App() {
   const [persons, setPersons] = useState(peopleList)
-  const [newContactName, setNewContactName] = useState('')
+  const [newContactObj, setNewContactObj] = useState({
+    id: '',
+    name:'',
+    number:''
+  })
 
-  const newContactNameHandler = (e) => setNewContactName(e.target.value)
+  const newContactNameHandler = (e) => setNewContactObj({...newContactObj, name: e.target.value})
+  const newContactNumberHandler = (e) => setNewContactObj({...newContactObj, number: e.target.value})
 
   const submitHandler = (e) => {
     e.preventDefault()
 
     const newContactData = {
       id: Math.random().toString(),
-      name:newContactName
+      name:newContactObj.name,
+      number:newContactObj.number
     }
 
     const itExists = persons.find(value => JSON.stringify(value) === JSON.stringify(newContactData))
 
     
-    !itExists && newContactName !== ''? setPersons(persons.concat(newContactData)):alert( `The name ${newContactName} already exists in the phonebook or is invalid`) 
+    !itExists && newContactObj.name !== '' && newContactObj.number !== ''? setPersons(persons.concat(newContactData)):alert( `The contact ${newContactObj.name} already exists in the phonebook or input is invalid`) 
     
     // console.log(itExists, newContactData, persons)
 
-    setNewContactName('')
-
+    setNewContactObj({
+      id: '',
+      name:'',
+      number:''
+    })
 
   }
   
@@ -38,7 +48,10 @@ function App() {
       <h2>Phonebook</h2>
       <form onSubmit={submitHandler}>
         <div>
-          Name: <input onChange={newContactNameHandler} value={newContactName}/>
+          Name: <input onChange={newContactNameHandler} value={newContactObj.name}/>
+        </div>
+        <div>
+          Number: <input onChange={newContactNumberHandler} value={newContactObj.number}/>
         </div>
         <div>
           <button type='submit'>Add</button>
@@ -46,7 +59,12 @@ function App() {
       </form>
       <h2>Numbers</h2>
       {persons.map(
-        (x) => <p key={x.id}>{x.name}</p>
+        (person) => {
+          return (
+            <div key={person.id}>
+              <p>{person.name} - {person.number}</p>
+            </div>
+          )}
       )}
     </div>
   )
