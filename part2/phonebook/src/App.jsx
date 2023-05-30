@@ -1,34 +1,44 @@
 import { useState } from 'react'
 
-function App() {
-  const [persons, setPersons] = useState([
-    {
-      id: '1',
-      name: 'John Doe'
-    }
-  ])
-  const [newContact, setNewContact] = useState('')
-
-  const newContactNameHandler = (e) => {
-    const newContactNameData = {
-      id: Math.random().toString,
-      name:e.target.value
-    }
-    setNewContact(newContactNameData)
+const peopleList = [
+  {
+    id: '1',
+    name: 'John Doe'
   }
+]
+
+function App() {
+  const [persons, setPersons] = useState(peopleList)
+  const [newContactName, setNewContactName] = useState('')
+
+  const newContactNameHandler = (e) => setNewContactName(e.target.value)
 
   const submitHandler = (e) => {
     e.preventDefault()
-    setPersons(persons.concat(newContact))
+
+    const newContactData = {
+      id: Math.random().toString(),
+      name:newContactName
+    }
+
+    const itExists = persons.find(value => JSON.stringify(value) === JSON.stringify(newContactData))
+
+    
+    !itExists && newContactName !== ''? setPersons(persons.concat(newContactData)):alert( `The name ${newContactName} already exists in the phonebook or is invalid`) 
+    
+    // console.log(itExists, newContactData, persons)
+
+    setNewContactName('')
+
+
   }
   
-
   return (
     <div>
       <h2>Phonebook</h2>
       <form onSubmit={submitHandler}>
         <div>
-          Name: <input onChange={newContactNameHandler}/>
+          Name: <input onChange={newContactNameHandler} value={newContactName}/>
         </div>
         <div>
           <button type='submit'>Add</button>
