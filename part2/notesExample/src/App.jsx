@@ -25,9 +25,9 @@ const App = () => {
 	const [enteredNote, setEnteredNote] = useState('')
 	const [showAll, setShowAll] = useState(true)
 
-	const enteredNoteHandler = (e) => {
-		setEnteredNote(e.target.value)
-	}
+	const enteredNoteHandler = (e) => setEnteredNote(e.target.value)
+	const filteredNotes = showAll ? notesList : notesList.filter(note => note.important)
+	const filterHandler = ()=>setShowAll(!showAll)
 
 	// console.log(enteredNote)
 
@@ -44,16 +44,23 @@ const App = () => {
 		setEnteredNote('')
 	}
 
+
+
 	return (
 		<div>
 			<h1>Notes</h1>
+			<div>
+				<button onClick={filterHandler}>
+					Showing {showAll?'all':'important'} notes
+				</button>
+			</div>
 			<ul>
-				{notesList.map((note) => (
+				{filteredNotes.map((note) => (
 					<Note key={note.id} note={note} />
 				))}
 			</ul>
 			<form onSubmit={formSubmitHandler}>
-				<input type="text" onChange={enteredNoteHandler} value={enteredNote} />
+				<input type="text" onChange={enteredNoteHandler} value={enteredNote} placeholder='Enter new note'/>
 				<button type="submit">Save</button>
 			</form>
 		</div>
