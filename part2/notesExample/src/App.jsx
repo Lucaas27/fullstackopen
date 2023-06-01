@@ -9,7 +9,7 @@ const App = () => {
   const [showAll, setShowAll] = useState(true);
 
   const hook = () => {
-    console.log("useEffect fired");
+    // console.log("useEffect fired");
     axios.get("http://localhost:3001/notes").then((res) => {
       //   console.log(res);
       setNotesList(res.data);
@@ -20,6 +20,7 @@ const App = () => {
   //   console.log("render", notesList.length, "notes");
 
   const enteredNoteHandler = (e) => setEnteredNote(e.target.value);
+
   const filteredNotes = showAll
     ? notesList
     : notesList.filter((note) => note.important);
@@ -29,15 +30,20 @@ const App = () => {
 
   const formSubmitHandler = (e) => {
     e.preventDefault();
+
     const newNoteData = {
-      id: Math.random(),
       content: enteredNote,
       important: Math.random() < 0.5,
     };
-    setNotesList(notesList.concat(newNoteData)); // setNotesList([...notesList, newNoteData]))
+
+    // setNotesList([...notesList, newNoteData]))
     // console.log(newNoteData)
     // console.log(notesList)
-    setEnteredNote("");
+    axios.post("http://localhost:3001/notes", newNoteData).then((res) => {
+      // console.log(res.data);
+      setNotesList(notesList.concat(res.data));
+      setEnteredNote("");
+    });
   };
 
   return (

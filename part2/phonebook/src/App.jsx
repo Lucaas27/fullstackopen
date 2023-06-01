@@ -18,7 +18,7 @@ function App() {
     axios
       .get("http://localhost:3001/contacts")
       .then((res) => setPersons(res.data));
-  });
+  }, []);
 
   const newContactNameHandler = (e) =>
     setNewContactObj({ ...newContactObj, name: e.target.value });
@@ -32,25 +32,32 @@ function App() {
 
   const submitHandler = (e) => {
     e.preventDefault();
+
     const newContactData = {
-      id: Math.random().toString(),
       name: newContactObj.name,
       number: newContactObj.number,
     };
+
     const itExists = persons.find(
       (value) => JSON.stringify(value) === JSON.stringify(newContactData)
     );
+
+    const postRequest = axios
+      .post("http://localhost:3001/contacts", newContactData)
+      .then((res) => {
+        setPersons(persons.concat(res.data));
+        setNewContactObj({
+          name: "",
+          number: "",
+        });
+      });
+
     !itExists && newContactObj.name !== "" && newContactObj.number !== ""
-      ? setPersons(persons.concat(newContactData))
+      ? setPersons(postRequest)
       : alert(
           `The contact ${newContactObj.name} already exists in the phonebook or input is invalid`
         );
     // console.log(itExists, newContactData, persons)
-    setNewContactObj({
-      id: "",
-      name: "",
-      number: "",
-    });
   };
 
   const filteredPersonList = persons.filter((person) =>
