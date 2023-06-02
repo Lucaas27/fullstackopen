@@ -1,33 +1,44 @@
 import React from "react";
 import Note from "./components/Note";
 import { useState, useEffect } from "react";
-import axios from "axios";
+import noteService from "./services/notes";
 
 const App = () => {
   const [notesList, setNotesList] = useState([]);
   const [enteredNote, setEnteredNote] = useState("");
   const [showAll, setShowAll] = useState(true);
 
-  const hook = () => {
+  /**************** Get list of notes when page loads ***************/
+  useEffect(() => {
     // console.log("useEffect fired");
-    axios.get("http://localhost:3001/notes").then((res) => {
+    noteService.getAll().then((initialNotes) => {
       //   console.log(res);
-      setNotesList(res.data);
+      setNotesList(initialNotes);
     });
-  };
+  }, []);
 
-  useEffect(hook, []);
-  //   console.log("render", notesList.length, "notes");
+  // console.log("render", notesList.length, "notes");
 
   const enteredNoteHandler = (e) => setEnteredNote(e.target.value);
 
   const filteredNotes = showAll
     ? notesList
     : notesList.filter((note) => note.important);
+
   const filterHandler = () => setShowAll(!showAll);
 
-  // console.log(enteredNote)
+  /**************** Update note importance ***************/
+  const toggleImportanceHandler = (id) => {
+    const currentNote = notesList.find((n) => n.id === id);
+    const modifiedNote = { ...currentNote, important: !currentNote.important };
 
+    noteService.update(id, modifiedNote).then((returnedNote) => {
+      //if the note is not the targeted one, it will remain the same. Otherwise the note will be replaced
+      setNotesList(notesList.map((n) => (n.id !== id ? n : returnedNote)));
+    });
+  };
+
+  /**************** Post new notes ***************/
   const formSubmitHandler = (e) => {
     e.preventDefault();
 
@@ -39,9 +50,9 @@ const App = () => {
     // setNotesList([...notesList, newNoteData]))
     // console.log(newNoteData)
     // console.log(notesList)
-    axios.post("http://localhost:3001/notes", newNoteData).then((res) => {
+    noteService.create(newNoteData).then((newNoteReturned) => {
       // console.log(res.data);
-      setNotesList(notesList.concat(res.data));
+      setNotesList(notesList.concat(newNoteReturned));
       setEnteredNote("");
     });
   };
@@ -51,12 +62,16 @@ const App = () => {
       <h1>Notes</h1>
       <div>
         <button onClick={filterHandler}>
-          Showing {showAll ? "all" : "important"} notes
+          Click to show {showAll ? "important" : "all"} notes
         </button>
       </div>
       <ul>
         {filteredNotes.map((note) => (
-          <Note key={note.id} note={note} />
+          <Note
+            key={note.id}
+            note={note}
+            toggleImportanceHandler={toggleImportanceHandler}
+          />
         ))}
       </ul>
       <form onSubmit={formSubmitHandler}>
