@@ -11,10 +11,13 @@ const App = () => {
   /**************** Get list of notes when page loads ***************/
   useEffect(() => {
     // console.log("useEffect fired");
-    noteService.getAll().then((initialNotes) => {
-      //   console.log(res);
-      setNotesList(initialNotes);
-    });
+    noteService
+      .getAll()
+      .then((initialNotes) => {
+        //   console.log(res);
+        setNotesList(initialNotes);
+      })
+      .catch((error) => console.log(error.message));
   }, []);
 
   // console.log("render", notesList.length, "notes");
@@ -32,10 +35,19 @@ const App = () => {
     const currentNote = notesList.find((n) => n.id === id);
     const modifiedNote = { ...currentNote, important: !currentNote.important };
 
-    noteService.update(id, modifiedNote).then((returnedNote) => {
-      //if the note is not the targeted one, it will remain the same. Otherwise the note will be replaced
-      setNotesList(notesList.map((n) => (n.id !== id ? n : returnedNote)));
-    });
+    noteService
+      .update(id, modifiedNote)
+      .then((returnedNote) => {
+        //if the note is not the targeted one, it will remain the same. Otherwise the note will be replaced
+        setNotesList(notesList.map((n) => (n.id !== id ? n : returnedNote)));
+      })
+      .catch((error) => {
+        console.log(error.message);
+        alert(
+          `The note "${modifiedNote.content} " was already deleted from the server`
+        );
+        setNotesList(notesList.filter((n) => n.id !== id));
+      });
   };
 
   /**************** Post new notes ***************/
