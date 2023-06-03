@@ -3,7 +3,9 @@ import { useState, useEffect } from "react";
 import SearchFilter from "./components/SearchFilter";
 import NewContactForm from "./components/NewContactForm";
 import DisplayContacts from "./components/DisplayContacts";
+import Notification from "./components/Notification";
 import contactService from "./services/contacts";
+import "./index.css";
 
 function App() {
   const [persons, setPersons] = useState([]);
@@ -13,7 +15,12 @@ function App() {
     name: "",
     number: "",
   };
+  const cleanNotification = {
+    message: null,
+    status: null,
+  };
   const [newContactObj, setNewContactObj] = useState(cleanContact);
+  const [notification, setNotification] = useState(cleanNotification);
 
   useEffect(() => {
     contactService
@@ -67,17 +74,52 @@ function App() {
       window.confirm(
         `The contact ${newContactObj.name} already exists in the phonebook. Would you like to replace the phone number?`
       ) &&
-        contactService.update(itExists.id, modifiedContact).then(() => {
-          setPersons(
-            persons.map((p) => (p.id === itExists.id ? modifiedContact : p))
-          );
-          setNewContactObj(cleanContact);
-        });
+        contactService
+          .update(itExists.id, modifiedContact)
+          .then(() => {
+            setPersons(
+              persons.map((p) => (p.id === itExists.id ? modifiedContact : p))
+            );
+            setNewContactObj(cleanContact);
+          })
+          .then(() => {
+            setNotification({
+              message: `${modifiedContact.name}'s contact number has been updated`,
+              status: "success",
+            });
+            setTimeout(() => {
+              setNotification(cleanNotification);
+            }, 2500);
+          })
+          .catch(() => {
+            setNotification({
+              message: ` Information for ${itExists.name} has been modified or deleted in the server. Try again`,
+              status: "error",
+            });
+            setTimeout(() => {
+              setNotification(cleanNotification);
+            }, 2500);
+            contactService
+              .getAll()
+              .then((updatedContacts) => setPersons(updatedContacts));
+          });
     } else {
-      contactService.create(newContactData).then((newContact) => {
-        setPersons(persons.concat(newContact));
-        setNewContactObj(cleanContact);
-      });
+      contactService
+        .create(newContactData)
+        .then((newContact) => {
+          setPersons(persons.concat(newContact));
+          setNewContactObj(cleanContact);
+        })
+        .then(() => {
+          setNotification({
+            message: `Added ${newContactData.name}.`,
+            status: "success",
+          });
+
+          setTimeout(() => {
+            setNotification(cleanNotification);
+          }, 2500);
+        });
     }
   };
 
@@ -86,18 +128,41 @@ function App() {
   );
 
   const deleteContactHandler = (id) => {
-    window.confirm("Are you sure want to delete this contact?") &&
+    const contactToDelete = persons.find((p) => p.id === id);
+    window.confirm(
+      `Are you sure you want to delete ${contactToDelete.name}'s contact?`
+    ) &&
       contactService
         .deleteContact(id)
-        .then(() => setPersons(persons.filter((p) => p.id !== id)))
+        .then(() => setPersons(persons.filter((p) => p !== contactToDelete)))
+        .then(() => {
+          setNotification({
+            message: `${contactToDelete.name}'s contact has been successfully deleted.`,
+            status: "success",
+          });
+          setTimeout(() => {
+            setNotification(cleanNotification);
+          }, 2500);
+        })
         .catch((error) => {
           console.log(error.message);
-          alert(`The contact does not exist in the database`);
+          setPersons(persons.filter((p) => p !== contactToDelete));
+          setNotification({
+            message: `The contact ${contactToDelete.name} does not exist in the database`,
+            status: "error",
+          });
+          setTimeout(() => {
+            setNotification(cleanNotification);
+          }, 2500);
         });
   };
 
   return (
     <div>
+      <Notification
+        message={notification.message}
+        status={notification.status}
+      />
       <h2>Phonebook</h2>
       <SearchFilter filterHandler={filterHandler} />
       <h2>Add new contact</h2>
