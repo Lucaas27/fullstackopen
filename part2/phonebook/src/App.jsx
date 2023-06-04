@@ -15,12 +15,8 @@ function App() {
     name: "",
     number: "",
   };
-  const cleanNotification = {
-    message: null,
-    status: null,
-  };
   const [newContactObj, setNewContactObj] = useState(cleanContact);
-  const [notification, setNotification] = useState(cleanNotification);
+  const [notification, setNotification] = useState({});
 
   useEffect(() => {
     contactService
@@ -88,7 +84,7 @@ function App() {
               status: "success",
             });
             setTimeout(() => {
-              setNotification(cleanNotification);
+              setNotification({});
             }, 2500);
           })
           .catch(() => {
@@ -97,7 +93,7 @@ function App() {
               status: "error",
             });
             setTimeout(() => {
-              setNotification(cleanNotification);
+              setNotification({});
             }, 2500);
             contactService
               .getAll()
@@ -117,7 +113,7 @@ function App() {
           });
 
           setTimeout(() => {
-            setNotification(cleanNotification);
+            setNotification({});
           }, 2500);
         });
     }
@@ -141,7 +137,7 @@ function App() {
             status: "success",
           });
           setTimeout(() => {
-            setNotification(cleanNotification);
+            setNotification({});
           }, 2500);
         })
         .catch((error) => {
@@ -152,7 +148,7 @@ function App() {
             status: "error",
           });
           setTimeout(() => {
-            setNotification(cleanNotification);
+            setNotification({});
           }, 2500);
         });
   };
