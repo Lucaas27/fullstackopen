@@ -1,0 +1,36 @@
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+}
+
+h1 {
+  color: green;
+  font-style: italic;
+}
+
+.note {
+  color: grey;
+  padding-top: 3px;
+  font-size: 15px;
+}
+
+.error {
+  color: red;
+  background: #d3d3d3;
+  font-size: 1.2rem;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 5px;
+  margin-bottom: 5px;
+}
+
+.success {
+  color: green;
+  background: lightgrey;
+  font-size: 1.2rem;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 5px;
+  margin-bottom: 5px;
+}
