@@ -30,6 +30,7 @@ app.use(
 		':method :url :status :res[content-length] - :response-time ms :requestBody'
 	)
 )
+app.use(express.static('dist'))
 
 app.get('/', (request, response) => {
 	response.send('<h1>Hello World</h1>')
@@ -73,6 +74,4 @@ app.delete('/api/notes/:id', (request, response) => {
 	response.status(204).end()
 })
 
-app.listen(PORT, () =>
-	console.log(`Server running on http://localhost:${PORT}/api/notes/`)
-)
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
