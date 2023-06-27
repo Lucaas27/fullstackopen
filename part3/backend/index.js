@@ -21,7 +21,7 @@ let notes = [
 ]
 
 const app = express()
-const PORT = import.meta.env.PORT || 3001
+const PORT = process.env.PORT || 3001
 app.use(express.json())
 app.use(cors())
 morgan.token('requestBody', (req, res) => JSON.stringify(req.body))
