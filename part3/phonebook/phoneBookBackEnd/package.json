@@ -1,0 +1,24 @@
+{
+	"name": "server",
+	"version": "1.0.0",
+	"type": "module",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"server": "nodemon index.js",
+		"build:ui": "cd ../ && npm run build && cp -r dist ./phoneBookBackEnd/",
+		"rebuild": "rm -rf dist && cd ../ && npm run build && cp -r dist ./phoneBookBackEnd/",
+		"deploy": "npm run rebuild && git add . && git commit -m Deployment && git push"
+	},
+	"author": "Lucas Gomes (lucasggomees@gmail.com)",
+	"license": "MIT",
+	"devDependencies": {
+		"nodemon": "^2.0.22"
+	},
+	"dependencies": {
+		"cors": "^2.8.5",
+		"express": "^4.18.2",
+		"morgan": "^1.10.0"
+	}
+}
