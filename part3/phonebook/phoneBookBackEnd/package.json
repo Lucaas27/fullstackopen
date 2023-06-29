@@ -6,7 +6,8 @@
 	"main": "index.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"server": "nodemon index.js",
+		"start": "node index.js",
+		"dev": "nodemon index.js",
 		"build:ui": "cd ../ && npm run build && cp -r dist ./phoneBookBackEnd/",
 		"rebuild": "rm -rf dist && cd ../ && npm run build && cp -r dist ./phoneBookBackEnd/",
 		"deploy": "npm run rebuild && git add . && git commit -m Deployment && git push"
