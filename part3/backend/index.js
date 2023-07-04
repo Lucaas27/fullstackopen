@@ -50,11 +50,13 @@ app.post('/api/notes', (request, response) => {
 })
 
 app.get('/api/notes/:id', (request, response) => {
-	const id = Number(request.params.id)
-	const note = notes.find((note) => note.id === id)
-	note ? response.json(note) : response.status(404).end()
+	// const id = Number(request.params.id)
+	// const note = notes.find((note) => note.id === id)
+	// note ? response.json(note) : response.status(404).end()
 
-	Note.
+	NoteModel.findById(request.params.id).then(note => {
+		response.json(note)
+	})
 })
 
 app.delete('/api/notes/:id', (request, response) => {
