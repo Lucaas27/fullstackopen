@@ -8,7 +8,7 @@
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"start": "node index.js",
 		"dev": "nodemon index.js",
-		"build:ui": "rm -rf dist && cd ../notesExample && npm run build && cp -r dist ../backend",
+		"build:ui": "rm -rf dist && cd ../notesExampleFrontEnd && npm run build && cp -r dist ../notesExampleBackEnd",
 		"deploy:full": "npm run build:ui && git add . && git commit -m Deployment && git push"
 	},
 	"author": "Lucas Gomes",

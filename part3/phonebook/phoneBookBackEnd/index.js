@@ -1,45 +1,39 @@
 import express from 'express'
 import morgan from 'morgan'
 import cors from 'cors'
+import config from './utils/envs.js'
+import ContactModel from './models/contact.js'
 
-let contacts = [
-    {
-        "id": 1,
-        "name": "Arto Hellas",
-        "number": "040-123456"
-    },
-    {
-        "id": 2,
-        "name": "Ada Lovelace",
-        "number": "39-44-5323523"
-    },
-    {
-        "id": 3,
-        "name": "Dan Abramov",
-        "number": "12-43-234345"
-    },
-    {
-        "id": 4,
-        "name": "Mary Poppendieck",
-        "number": "39-23-6423122"
-    },
-    {
-        "id": 5,
-        "name": "Jon Snow",
-        "number": "07705555376"
-    }
-]
-
-// const requestLogger = (request, response, next) => {
-//     console.log('Method:', request.method)
-//     console.log('Path:  ', request.path)
-//     console.log('Body:  ', request.body)
-//     console.log('---')
-//     next()
-// }
+// let contacts = [
+//     {
+//         "id": 1,
+//         "name": "Arto Hellas",
+//         "number": "040-123456"
+//     },
+//     {
+//         "id": 2,
+//         "name": "Ada Lovelace",
+//         "number": "39-44-5323523"
+//     },
+//     {
+//         "id": 3,
+//         "name": "Dan Abramov",
+//         "number": "12-43-234345"
+//     },
+//     {
+//         "id": 4,
+//         "name": "Mary Poppendieck",
+//         "number": "39-23-6423122"
+//     },
+//     {
+//         "id": 5,
+//         "name": "Jon Snow",
+//         "number": "07705555376"
+//     }
+// ]
 
 const app = express()
-const PORT = process.env.PORT || 3000
+const PORT = config.port
 app.use(express.json())
 app.use(cors())
 app.use(express.static('dist'))
@@ -57,14 +51,15 @@ app.get('/info', (request, response) => {
 })
 
 app.get('/api/contacts', (request, response) => {
-
-    response.json(contacts)
+    ContactModel.find({}).then(contacts => response.json(contacts))
 })
 
 app.get('/api/contacts/:id', (request, response) => {
-    const id = Number(request.params.id);
-    const contact = contacts.find(c => c.id === id);
-    contact ? response.json(contact) : response.status(404).end();
+    ContactModel.findById(request.params.id)
+        .then(contact => {
+            response.json(contact);
+        })
+
 })
 
 app.delete('/api/contacts/:id', (request, response) => {
@@ -75,32 +70,32 @@ app.delete('/api/contacts/:id', (request, response) => {
 })
 
 
-const generateId = () => {
-    const maxId = contacts.length > 0 ? Math.max(...contacts.map(c => c.id)) : 0
-    return maxId + 1;
-}
+// const generateId = () => {
+//     const maxId = contacts.length > 0 ? Math.max(...contacts.map(c => c.id)) : 0
+//     return maxId + 1;
+// }
 
 app.post('/api/contacts/', (request, response) => {
     const body = request.body;
-    const contact = {
-        id: generateId(),
-        name: body.name,
-        number: body.number
-    }
 
     if (!body.name || !body.number) {
         return response.status(404).json({
             error: 'Name or number missing'
         })
     }
-    if (contacts.find(c => c.name === body.name)) {
-        return response.status(400).json({
-            error: 'Name must be unique'
-        })
-    }
 
-    contacts = contacts.concat(contact)
-    response.json(contact)
+    // ContactModel.find({ name: body.name }).then(result => {
+    //     return response.status(400).json({
+    //         error: 'Name must be unique'
+    //     })
+    // })
+
+    const contact = new ContactModel({
+        name: body.name,
+        number: body.number
+    })
+
+    contact.save().then(newContact => response.json(newContact))
 })
 
 const unknownEndpoint = (request, response) => {

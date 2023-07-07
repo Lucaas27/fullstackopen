@@ -1,5 +1,5 @@
 import express from 'express'
-import config from './envs.js'
+import config from './utils/envs.js'
 import morgan from 'morgan'
 import cors from 'cors'
 import NoteModel from './models/note.js'

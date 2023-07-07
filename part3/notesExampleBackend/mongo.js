@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import config from './envs.js'
+import config from './utils/envs.js'
 
 const password = process.argv[2]
 

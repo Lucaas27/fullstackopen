@@ -1,4 +1,4 @@
-import config from '../envs.js'
+import config from '../utils/envs.js'
 import mongoose from 'mongoose'
 
 const url = config.mongodb_uri
