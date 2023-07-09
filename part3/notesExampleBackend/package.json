@@ -9,7 +9,7 @@
 		"start": "node index.js",
 		"dev": "nodemon index.js",
 		"build:ui": "rm -rf dist && cd ../notesExampleFrontEnd && npm run build && cp -r dist ../notesExampleBackEnd",
-		"deploy:full": "npm run build:ui && git add . && git commit -m Deployment && git push"
+		"deploy": "npm run build:ui && git add . && git commit -m 'Deployment of the Front End for the Notes App' && git push"
 	},
 	"author": "Lucas Gomes",
 	"license": "ISC",
