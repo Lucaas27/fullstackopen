@@ -10,7 +10,7 @@
 		"dev": "nodemon index.js",
 		"build:ui": "cd ../ && npm run build && cp -r dist ./phoneBookBackEnd/",
 		"rebuild": "rm -rf dist && cd ../ && npm run build && cp -r dist ./phoneBookBackEnd/",
-		"deploy": "npm run rebuild && git add . && git commit -m Deployment && git push"
+		"deploy": "npm run rebuild && git add . && git commit -m 'Deployment of the Front End for the Phone book App' && git push"
 	},
 	"author": "Lucas Gomes (lucasggomees@gmail.com)",
 	"license": "MIT",
