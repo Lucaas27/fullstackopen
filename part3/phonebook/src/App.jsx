@@ -35,6 +35,19 @@ function App() {
 		setPersonsFilter(e.target.value)
 	}
 
+	const notifications = (message, status) => {
+		setNotification({
+			message: message,
+			status: status,
+		})
+		setTimeout(() => {
+			setNotification({
+				message: null,
+				status: null,
+			})
+		}, 2500)
+	}
+
 	const submitHandler = (e) => {
 		e.preventDefault()
 
@@ -77,22 +90,16 @@ function App() {
 						setNewContactObj(cleanContact)
 					})
 					.then(() => {
-						setNotification({
-							message: `${modifiedContact.name}'s contact number has been updated`,
-							status: 'success',
-						})
-						setTimeout(() => {
-							setNotification({})
-						}, 2500)
+						notifications(
+							`${modifiedContact.name}'s contact number has been updated`,
+							'success'
+						)
 					})
 					.catch(() => {
-						setNotification({
-							message: ` Information for ${itExists.name} has been modified or deleted in the server. Try again`,
-							status: 'error',
-						})
-						setTimeout(() => {
-							setNotification({})
-						}, 2500)
+						notifications(
+							` Information for ${itExists.name} has already been modified or deleted in the server. Try again`,
+							'error'
+						)
 						contactService
 							.getAll()
 							.then((updatedContacts) => setPersons(updatedContacts))
@@ -105,14 +112,7 @@ function App() {
 					setNewContactObj(cleanContact)
 				})
 				.then(() => {
-					setNotification({
-						message: `Added ${newContactData.name}.`,
-						status: 'success',
-					})
-
-					setTimeout(() => {
-						setNotification({})
-					}, 2500)
+					notifications(`Added ${newContactData.name}.`, 'success')
 				})
 		}
 	}
@@ -130,24 +130,18 @@ function App() {
 				.deleteContact(id)
 				.then(() => setPersons(persons.filter((p) => p !== contactToDelete)))
 				.then(() => {
-					setNotification({
-						message: `${contactToDelete.name}'s contact has been successfully deleted.`,
-						status: 'success',
-					})
-					setTimeout(() => {
-						setNotification({})
-					}, 2500)
+					notifications(
+						`${contactToDelete.name}'s contact has been successfully deleted.`,
+						'success'
+					)
 				})
 				.catch((error) => {
 					console.log(error.message)
 					setPersons(persons.filter((p) => p !== contactToDelete))
-					setNotification({
-						message: `The contact ${contactToDelete.name} does not exist in the database`,
-						status: 'error',
-					})
-					setTimeout(() => {
-						setNotification({})
-					}, 2500)
+					notifications(
+						`The contact ${contactToDelete.name} does not exist in the database`,
+						'error'
+					)
 				})
 	}
 
