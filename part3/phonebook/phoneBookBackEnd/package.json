@@ -9,9 +9,9 @@
     "lint": "eslint . --fix",
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "build:ui": "cd ../ && npm run build && cp -r dist ./phoneBookBackEnd/",
-    "rebuild": "rm -rf dist && cd ../ && npm run build && cp -r dist ./phoneBookBackEnd/",
-    "deploy": "npm run rebuild && git add . && git commit -m 'Deployment of the Front End for the Phone book App' && git push origin main"
+    "build:ui": "cd .. && npm run build && cp -r dist phoneBookBackEnd/",
+    "rebuild": "rm -rf dist && cd .. && npm run build && cp -r dist phoneBookBackEnd/",
+    "deploy": "npm run rebuild && cd .. && git add . && git commit -m 'Deployment of the Front End for the Phone book App' && git push origin main"
   },
   "author": "Lucas Gomes (lucasggomees@gmail.com)",
   "license": "MIT",
