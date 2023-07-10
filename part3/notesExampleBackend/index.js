@@ -20,8 +20,6 @@ app.use((function morganToken() {
 })())
 
 
-
-
 // Routes
 app.get('/', (request, response) => {
 	response.send('<h1>Welcome to the notes app api !</h1>')
@@ -33,11 +31,11 @@ app.get('/api/notes', (request, response) => {
 	})
 })
 
-app.post('/api/notes', (request, response) => {
+app.post('/api/notes', (request, response, next) => {
 	const body = request.body
 
 	if (!body.content) {
-		return response.json({ error: 'content missing' })
+		return response.status(400).json({ error: 'content missing' })
 	}
 
 	const note = new NoteModel({
@@ -45,7 +43,9 @@ app.post('/api/notes', (request, response) => {
 		important: body.important || false,
 	})
 
-	note.save().then(savedNote => response.json(savedNote))
+	note.save()
+		.then(savedNote => response.json(savedNote))
+		.catch(error => next(error))
 
 })
 
@@ -70,28 +70,29 @@ app.delete('/api/notes/:id', (request, response, next) => {
 })
 
 app.put('/api/notes/:id', (request, response, next) => {
-	const body = request.body
+	const { content, important } = request.body
 
-	const note = {
-		content: body.content,
-		important: body.important
-	}
-
-	NoteModel.findByIdAndUpdate(request.params.id, note, { new: true })
+	NoteModel.findByIdAndUpdate(request.params.id, { content, important }, { new: true, runValidators: true, context: 'query' })
 		.then(updatedNote => response.json(updatedNote))
 		.catch(error => next(error))
 })
 
-// middleware for handling unsupported routes 
+// Middleware for handling unsupported routes 
 app.use(function unknownEndpoint(req, res) {
 	res.status(404).send({ error: 'Unknown endpoint' })
 })
 
-//Error middleware
+//Custom error middleware
 app.use(function errorHandler(error, req, res, next) {
 	console.log(error.message)
 	if (error.name === 'CastError') {
 		return res.status(400).send({ error: 'Note ID does not match the required format' })
+	}
+	if (error.name === 'ValidationError') {
+		return res.status(400).json({
+			Error: error.name,
+			Reason: error.message
+		})
 	}
 	next(error)
 })
