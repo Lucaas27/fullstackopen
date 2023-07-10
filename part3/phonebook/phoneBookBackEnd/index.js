@@ -44,39 +44,43 @@ app.delete('/api/contacts/:id', (request, response, next) => {
 })
 
 app.put('/api/contacts/:id', (request, response, next) => {
-    const contact = {
-        name: request.body.name,
-        number: request.body.number,
-    }
+    const { name, number } = request.body
 
-    ContactModel.findByIdAndUpdate(request.params.id, contact, { new: true })
+    ContactModel.findByIdAndUpdate(request.params.id, { name, number }, { new: true, runValidators: true, context: 'query' })
         .then(contactAdded => response.json(contactAdded))
         .catch(error => next(error))
 })
 
 
 
-app.post('/api/contacts/', (request, response) => {
-    const body = request.body;
+app.post('/api/contacts/', (request, response, next) => {
+    const { name, number } = request.body;
 
-    if (!body.name || !body.number) {
-        return response.status(404).json({
-            error: 'Name or number missing'
-        })
+    if (!name) {
+        return response
+            .status(404)
+            .json({
+                error: 'Name is missing'
+            })
+    }
+    if (!number) {
+        return response
+            .status(404)
+            .json({
+                error: 'Number is missing'
+            })
     }
 
-    // ContactModel.find({ name: body.name }).then(result => {
-    //     return response.status(400).json({
-    //         error: 'Name must be unique'
-    //     })
-    // })
-
     const contact = new ContactModel({
-        name: body.name,
-        number: body.number
+        name: name,
+        number: number
     })
 
-    contact.save().then(newContact => response.json(newContact))
+    contact
+        .save()
+        .then(newContact => response.json(newContact))
+        .catch(error => next(error))
+
 })
 
 const unknownEndpoint = (request, response) => {
@@ -90,7 +94,12 @@ app.use(function errorHandler(error, req, res, next) {
     console.log(error.message)
     if (error.name === 'CastError') {
 
-        return res.status(400).send({ error: 'Contact ID does not match the required format' })
+        return res.status(400)
+            .send({ error: 'Contact ID does not match the required format' })
+    }
+    if (error.name === 'ValidationError') {
+        return res.status(400)
+            .json({ error: error.name, reason: error.message })
     }
     next(error)
 })

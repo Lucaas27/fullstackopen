@@ -67,12 +67,12 @@ function App() {
 		if (newContactObj.name === '' || newContactObj.number === '') {
 			let invalidInputMessage
 			if (newContactObj.name === '' && newContactObj.number === '') {
-				invalidInput = alert(`The inputs are invalid`)
+				invalidInputMessage = notifications(`The inputs are invalid`, 'error')
 			} else {
-				invalidInput =
+				invalidInputMessage =
 					newContactObj.name === ''
-						? alert(`The name input is invalid`)
-						: alert(`The number input is invalid`)
+						? notifications(`The name input is invalid`, 'error')
+						: notifications(`The number input is invalid`, 'error')
 			}
 			return invalidInputMessage
 		}
@@ -114,6 +114,7 @@ function App() {
 				.then(() => {
 					notifications(`Added ${newContactData.name}.`, 'success')
 				})
+				.catch((error) => console.log(error))
 		}
 	}
 
