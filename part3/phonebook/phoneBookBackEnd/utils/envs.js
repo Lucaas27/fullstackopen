@@ -1,8 +1,8 @@
-import dotenv from 'dotenv'
+import dotenv from 'dotenv';
 
-dotenv.config()
+dotenv.config();
 
 export default {
-    mongodb_uri: process.env.MONGODB_URI,
-    port: 3000
-}
+  mongodb_uri: process.env.MONGODB_URI,
+  port: 3000,
+};

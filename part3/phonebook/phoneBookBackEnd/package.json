@@ -6,6 +6,7 @@
 	"main": "index.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
+		"lint": "eslint . --fix",
 		"start": "node index.js",
 		"dev": "nodemon index.js",
 		"build:ui": "cd ../ && npm run build && cp -r dist ./phoneBookBackEnd/",
@@ -15,6 +16,9 @@
 	"author": "Lucas Gomes (lucasggomees@gmail.com)",
 	"license": "MIT",
 	"devDependencies": {
+		"eslint": "^8.44.0",
+		"eslint-config-airbnb-base": "^15.0.0",
+		"eslint-plugin-import": "^2.27.5",
 		"nodemon": "^2.0.22"
 	},
 	"dependencies": {

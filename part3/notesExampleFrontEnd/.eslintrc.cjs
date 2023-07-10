@@ -2,7 +2,6 @@ module.exports = {
   env: {
     browser: true,
     es2021: true,
-    node: true,
   },
   extends: 'airbnb',
   overrides: [
@@ -23,8 +22,5 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
-    'no-alert': 0,
-    'no-console': 0,
-    'react/prop-types': 0,
   },
 };

@@ -1,10 +1,9 @@
 module.exports = {
   env: {
-    browser: true,
     es2021: true,
     node: true,
   },
-  extends: 'airbnb',
+  extends: 'airbnb-base',
   overrides: [
     {
       env: {
@@ -22,9 +21,12 @@ module.exports = {
     ecmaVersion: 'latest',
     sourceType: 'module',
   },
+  root: true,
   rules: {
     'no-alert': 0,
     'no-console': 0,
-    'react/prop-types': 0,
+    'import/extensions': 0,
+    'no-underscore-dangle': 0,
+    'no-param-reassign': 0,
   },
 };
