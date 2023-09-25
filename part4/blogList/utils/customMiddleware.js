@@ -1,5 +1,4 @@
-const morgan = require('morgan');
-const { info } = require('./logger.js');
+import morgan from 'morgan';
 
 const reqLogger = () => {
   morgan.token('requestBody', req => JSON.stringify(req.body));
@@ -14,4 +13,4 @@ const reqLogger = () => {
 //   next();
 // };
 
-module.exports = reqLogger;
+export default reqLogger;

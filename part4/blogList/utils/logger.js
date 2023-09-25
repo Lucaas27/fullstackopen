@@ -1,6 +1,4 @@
-const logger = {
-  info: (...params) => console.log(...params),
-  error: (...params) => console.error(...params),
-};
+const info = (...params) => console.log(...params);
+const error = (...params) => console.error(...params);
 
-module.exports = logger;
+export { info, error };
