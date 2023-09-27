@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import config from './utils/envs.js';
 
-const url = config.mongodb_uri;
+const url = config.test_mongodb_uri;
 
 const notesAppSchema = new mongoose.Schema({
   content: String,
@@ -18,7 +18,7 @@ mongoose.connect(url);
 //     process.exit(1)
 // }
 
-console.log(process.argv);
+// console.log(process.argv);
 
 if (process.argv.length === 3 || process.argv.length === 4) {
   const note = new Note({
@@ -26,19 +26,24 @@ if (process.argv.length === 3 || process.argv.length === 4) {
     important: process.argv[3] || false,
   });
 
-  note.save().then(() => {
-    console.log('Note saved!');
-    mongoose.connection.close();
-  }).catch((error) => {
-    console.log('Error saving note', error);
-    mongoose.connection.close();
-  });
+  note
+    .save()
+    .then(() => {
+      console.log('Note saved!');
+      mongoose.connection.close();
+    })
+    .catch((error) => {
+      console.log('Error saving note', error);
+      mongoose.connection.close();
+    });
 } else {
-  Note.find({}).then((result) => {
-    result.forEach((note) => console.log(note));
-    mongoose.connection.close();
-  }).catch((error) => {
-    console.log('Error retrieving notes', error);
-    mongoose.connection.close();
-  });
+  Note.find({})
+    .then((result) => {
+      result.forEach((note) => console.log(note));
+      mongoose.connection.close();
+    })
+    .catch((error) => {
+      console.log('Error retrieving notes', error);
+      mongoose.connection.close();
+    });
 }

@@ -26,5 +26,11 @@ module.exports = {
     'no-param-reassign': 0,
     'no-underscore-dangle': 0,
     'wrap-iife': 0,
+    'import/no-extraneous-dependencies': [
+      'error',
+      {
+        devDependencies: true,
+      },
+    ],
   },
 };

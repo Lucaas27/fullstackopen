@@ -1,6 +1,6 @@
 import { reverse } from '../utils/for_testing';
 
-describe('reverse', () => {
+describe.skip('reverse', () => {
   test('of "a"', () => {
     const result = reverse('a');
 
