@@ -5,10 +5,10 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "cross-env NODE_ENV=test node --experimental-vm-modules node_modules/jest/bin/jest.js --verbose --runInBand",
+    "test": "NODE_ENV=test node --experimental-vm-modules node_modules/jest/bin/jest.js --verbose --runInBand",
     "lint": "eslint .",
-    "start": "cross-env NODE_ENV=production node index.js",
-    "dev": "cross-env NODE_ENV=development nodemon index.js",
+    "start": "NODE_ENV=production node index.js",
+    "dev": "NODE_ENV=development nodemon index.js",
     "build:ui": "rm -rf dist && cd ../client && npm run build && cp -r dist ../server",
     "deploy": "npm run build:ui && cd .. && git add . && git commit -m 'Deployment of the Back End for the Notes App' && git push origin main"
   },

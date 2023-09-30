@@ -1,5 +1,15 @@
-export const info = (...params) =>
-  process.env.NODE_ENV !== 'test' && console.log(...params);
+const info = (...params) => {
+  if (process.env.NODE_ENV !== 'test') {
+    return console.log(...params);
+  }
+  return null;
+};
 
-export const error = (...params) =>
-  process.env.NODE_ENV !== 'test' && console.error(...params);
+const error = (...params) => {
+  if (process.env.NODE_ENV !== 'test') {
+    return console.error(...params);
+  }
+  return null;
+};
+
+export { info, error };

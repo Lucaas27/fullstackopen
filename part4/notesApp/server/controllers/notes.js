@@ -4,13 +4,15 @@ import NoteModel from '../models/note.js';
 const notesRouter = express.Router();
 
 // Routes
-notesRouter.get('/', (request, response) => {
-  NoteModel.find({}).then((notes) => {
-    response.json(notes);
-  });
+notesRouter.get('/', async (request, response) => {
+  // NoteModel.find({}).then((notes) => {
+  //   response.json(notes);
+  // });
+  const notes = await NoteModel.find({});
+  response.json(notes);
 });
 
-notesRouter.post('/', (request, response, next) => {
+notesRouter.post('/', async (request, response, next) => {
   const { content, important } = request.body;
 
   if (!content) {
@@ -21,41 +23,44 @@ notesRouter.post('/', (request, response, next) => {
     content,
     important: important || false,
   });
-
-  return note
-    .save()
-    .then((savedNote) => response.json(savedNote))
-    .catch((error) => next(error));
+  try {
+    const savedNote = await note.save();
+    return response.json(savedNote);
+  } catch (error) {
+    return next(error);
+  }
 });
 
-notesRouter.get('/:id', (request, response, next) => {
-  // const id = Number(request.params.id)
-  // const note = notes.find((note) => note.id === id)
-  // note ? response.json(note) : response.status(404).end()
-
-  NoteModel.findById(request.params.id)
-    .then((note) => (note ? response.json(note) : response.status(404).end()))
-    .catch((error) => next(error));
+notesRouter.get('/:id', async (request, response, next) => {
+  try {
+    const note = await NoteModel.findById(request.params.id);
+    return note ? response.json(note) : response.status(404).end();
+  } catch (error) {
+    return next(error);
+  }
 });
 
-notesRouter.delete('/:id', (request, response, next) => {
-  // const id = Number(request.params.id)
-  // notes = notes.filter((note) => note.id !== id)
-  NoteModel.findByIdAndRemove(request.params.id)
-    .then(() => response.status(204).end())
-    .catch((error) => next(error));
+notesRouter.delete('/:id', async (request, response, next) => {
+  try {
+    await NoteModel.findByIdAndRemove(request.params.id);
+    return response.status(204).end();
+  } catch (error) {
+    return next(error);
+  }
 });
 
-notesRouter.put('/:id', (request, response, next) => {
+notesRouter.put('/:id', async (request, response, next) => {
   const { content, important } = request.body;
-
-  NoteModel.findByIdAndUpdate(
-    request.params.id,
-    { content, important },
-    { new: true, runValidators: true, context: 'query' },
-  )
-    .then((updatedNote) => response.json(updatedNote))
-    .catch((error) => next(error));
+  try {
+    const updatedNote = await NoteModel.findByIdAndUpdate(
+      request.params.id,
+      { content, important },
+      { new: true, runValidators: true, context: 'query' },
+    );
+    return response.json(updatedNote);
+  } catch (error) {
+    return next(error);
+  }
 });
 
 export default notesRouter;
