@@ -1,3 +1,4 @@
+import { expect } from 'chai';
 import { mostLikes } from '../utils/for_testing.js';
 import { blogsList } from './dataJSON.js';
 
@@ -6,7 +7,7 @@ describe('author with most likes', () => {
     author: 'Edsger W. Dijkstra',
     likes: 17,
   };
-  test('Edsger W. Dijkstra has the most liked blogs', () => {
-    expect(mostLikes(blogsList)).toEqual(mostLiked);
+  it('returns Edsger W. Dijkstra as the author with most liked blogs', () => {
+    expect(mostLikes(blogsList)).to.deep.equal(mostLiked);
   });
 });

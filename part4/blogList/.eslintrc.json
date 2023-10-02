@@ -4,7 +4,10 @@
     "es2021": true,
     "jest": true
   },
-  "extends": ["airbnb-base", "prettier"],
+  "extends": [
+    "airbnb-base",
+    "prettier"
+  ],
   "parserOptions": {
     "ecmaFeatures": {
       "jsx": true
@@ -12,8 +15,12 @@
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
-  "ignorePatterns": ["node_modules/"],
-  "plugins": ["prettier"],
+  "ignorePatterns": [
+    "node_modules/"
+  ],
+  "plugins": [
+    "prettier"
+  ],
   "rules": {
     "import/no-extraneous-dependencies": [
       "error",
@@ -27,7 +34,10 @@
     "no-underscore-dangle": [
       "error",
       {
-        "allow": ["_id", "__v"]
+        "allow": [
+          "_id",
+          "__v"
+        ]
       }
     ],
     "no-alert": "off",

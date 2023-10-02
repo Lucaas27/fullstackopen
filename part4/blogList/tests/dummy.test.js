@@ -1,3 +1,4 @@
+import { expect } from 'chai';
 import { dummy } from '../utils/for_testing.js';
 
-test('dummy returns 1', () => expect(dummy([])).toBe(1));
+it('returns 1', () => expect(dummy([])).to.equal(1));
