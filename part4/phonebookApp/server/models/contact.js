@@ -1,12 +1,4 @@
 import mongoose from 'mongoose';
-import config from '../utils/envs.js';
-
-const url = config.mongodb_uri;
-
-mongoose.connect(url)
-  .then(() => {
-    console.log('Connected to MongoDB Atlas');
-  }).catch((error) => console.log('Failed to connect to MongoDb Atlas.', error));
 
 const contactSchema = new mongoose.Schema({
   name: {
@@ -19,9 +11,9 @@ const contactSchema = new mongoose.Schema({
     minLength: [8, 'Number must be at least 8 characters'],
     required: [true, 'Number is required'],
     validate: [(value) => {
-      const phoneNumberRegex = /^[0-9]{2,3}-[0-9]+$/;
+      const phoneNumberRegex = /^(?:0|\+?44)(?:\d\s?){10}$/;
       return phoneNumberRegex.test(value);
-    }, 'The number does not conform to the correct format. i.e. 44-7704456293'],
+    }, 'The number does not conform to the correct format. i.e. +447704456298 or 07704456298'],
   },
 });
 
@@ -33,6 +25,4 @@ mongoose.set('toJSON', {
   },
 });
 
-const ContactModel = mongoose.model('Contact', contactSchema);
-
-export default ContactModel;
+export default mongoose.model('Contact', contactSchema);

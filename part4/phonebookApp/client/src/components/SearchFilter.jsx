@@ -2,10 +2,8 @@ import React from 'react';
 
 function SearchFilter({ filterHandler }) {
   return (
-    <div>
-      Search:
-      {' '}
-      <input type="text" aria-label="Search" onChange={filterHandler} />
+    <div className="search-contact-form">
+      <input type="text" aria-label="Search" onChange={filterHandler} placeholder="Search" />
     </div>
   );
 }

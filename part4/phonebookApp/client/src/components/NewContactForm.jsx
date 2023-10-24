@@ -7,19 +7,16 @@ function NewContactForm({
   newContactNumberHandler,
 }) {
   return (
-    <form onSubmit={submitHandler}>
+    <form onSubmit={submitHandler} className="add-contact-form">
       <div>
-        Name:
-        {' '}
-        <input aria-label="Contact name" onChange={newContactNameHandler} value={newContactObj.name} />
+        <input aria-label="Contact name" onChange={newContactNameHandler} value={newContactObj.name} placeholder="Name" />
       </div>
       <div>
-        Number:
-        {' '}
         <input
           onChange={newContactNumberHandler}
           value={newContactObj.number}
           aria-label="Contact number"
+          placeholder="Number"
         />
       </div>
       <div>
