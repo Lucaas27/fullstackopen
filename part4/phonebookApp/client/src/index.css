@@ -12,6 +12,8 @@
   border-radius: 5px;
   padding: 5px;
   margin-bottom: 5px;
+  width: 50%;
+  text-align: center;
 }
 
 .success {
@@ -22,4 +24,98 @@
   border-radius: 5px;
   padding: 5px;
   margin-bottom: 5px;
+  width: 50%;
+  text-align: center;
+}
+
+body {
+  background: #f3f3f3;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 16px;
+}
+h1,
+h2,
+h3,
+h4 {
+  color: #333;
+}
+
+.phonebook-app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding: 2rem;
+}
+
+.title {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.add-contact-form input,
+.search-contact-form input {
+  display: block;
+  margin: 0 0 1rem 0;
+  padding: 10px;
+  width: 250px;
+  border: 1px solid #ccc;
+}
+
+.dashboard {
+  display: flex;
+  justify-content: center;
+  align-items: start;
+}
+.dashboard-left {
+  border-right: 1px solid #ccc;
+  padding: 1rem;
+}
+.dashboard-right {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+.contact {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  justify-content: center;
+  align-items: baseline;
+}
+.contact-name {
+  margin: 0;
+  font-size: 1.2em;
+  text-transform: capitalize;
+}
+
+button {
+  padding: 10px 30px;
+  background: #f8a035;
+  color: #fff;
+  border: none;
+}
+
+@media only screen and (max-width: 650px) {
+  .dashboard {
+    flex-direction: column;
+  }
+
+  .dashboard-left {
+    border: none;
+  }
+
+  .dashboard-right {
+    border-top: 1px solid #ccc;
+    justify-content: center;
+    align-items: baseline;
+  }
+
+  .contact {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
 }

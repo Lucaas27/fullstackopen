@@ -44,7 +44,7 @@ function App() {
         message: null,
         status: null,
       });
-    }, 2500);
+    }, 3000);
   };
 
   const confirmation = (question) => window.confirm(question);
@@ -102,17 +102,19 @@ function App() {
               .then((updatedContacts) => setPersons(updatedContacts));
           });
       }
+    } else {
+      contactService
+        .create(newContactData)
+        .then((newContact) => {
+          setPersons(persons.concat(newContact));
+          setNewContactObj(cleanContact);
+        })
+        .then(() => {
+          notifications(`Added ${newContactData.name}.`, 'success');
+        })
+        .catch((error) => notifications(error.response.data.reason, 'error'));
     }
-    return contactService
-      .create(newContactData)
-      .then((newContact) => {
-        setPersons(persons.concat(newContact));
-        setNewContactObj(cleanContact);
-      })
-      .then(() => {
-        notifications(`Added ${newContactData.name}.`, 'success');
-      })
-      .catch((error) => notifications(error.response.data.reason, 'error'));
+    return null;
   };
 
   const filteredPersonList = persons.filter(
@@ -145,25 +147,32 @@ function App() {
   };
 
   return (
-    <div>
-      <Notification
-        message={notification.message}
-        status={notification.status}
-      />
-      <h2>Phonebook</h2>
-      <SearchFilter filterHandler={filterHandler} />
-      <h2>Add new contact</h2>
-      <NewContactForm
-        submitHandler={submitHandler}
-        newContactNameHandler={newContactNameHandler}
-        newContactObj={newContactObj}
-        newContactNumberHandler={newContactNumberHandler}
-      />
-      <h2>Contacts</h2>
-      <DisplayContacts
-        filteredPersonList={filteredPersonList}
-        deleteContactHandler={deleteContactHandler}
-      />
+    <div className="phonebook-app">
+      <div className="title">
+        <h1>Phonebook</h1>
+        <Notification
+          message={notification.message}
+          status={notification.status}
+        />
+      </div>
+      <div className="dashboard">
+        <div className="dashboard-left">
+          <SearchFilter filterHandler={filterHandler} />
+          <h2>Add new contact</h2>
+          <NewContactForm
+            submitHandler={submitHandler}
+            newContactNameHandler={newContactNameHandler}
+            newContactObj={newContactObj}
+            newContactNumberHandler={newContactNumberHandler}
+          />
+        </div>
+        <div className="dashboard-right">
+          <DisplayContacts
+            filteredPersonList={filteredPersonList}
+            deleteContactHandler={deleteContactHandler}
+          />
+        </div>
+      </div>
     </div>
   );
 }
