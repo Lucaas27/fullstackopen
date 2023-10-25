@@ -11,7 +11,7 @@
     "dev": "cross-env NODE_ENV=dev nodemon index.js",
     "build:ui": "cd ../client&&npm run build&&cp -r dist ../server/&&cd ../server",
     "rebuild": "rm -rf dist&&cd ../client&&npm run build&&cp -r dist ../server/&&cd ../server",
-    "deploy": "npm run rebuild&&cd ..&&git add .&&git commit -m 'Redeployment of the Front End for Phone book App'&& git push origin&&cd ../server"
+    "deploy": "npm run rebuild&&cd ..&&git add .&&git commit -m 'Redeployment of the Front End for Phone book App'&&git push origin&&cd ../server"
   },
   "author": "Lucas Gomes (lucasggomees@gmail.com)",
   "license": "MIT",
