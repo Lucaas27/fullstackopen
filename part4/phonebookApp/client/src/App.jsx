@@ -4,6 +4,8 @@ import NewContactForm from './components/NewContactForm';
 import DisplayContacts from './components/DisplayContacts';
 import Notification from './components/Notification';
 import contactService from './services/contacts';
+import Pagination from './components/Pagination';
+
 import './index.css';
 
 function App() {
@@ -16,6 +18,9 @@ function App() {
   };
   const [newContactObj, setNewContactObj] = useState(cleanContact);
   const [notification, setNotification] = useState({});
+  const [currentPage, setCurrentPage] = useState(1);
+  const contactsPerPage = 5; // Set the number of contacts to display per page
+  const [contactCount, setContactCount] = useState('');
 
   useEffect(() => {
     contactService
@@ -23,6 +28,15 @@ function App() {
       .then((initialContacts) => setPersons(initialContacts))
       .catch((error) => console.log(error.message));
   }, []);
+
+  useEffect(() => {
+    contactService
+      .fetchContactCount()
+      .then((amount) => {
+        setContactCount(amount);
+      })
+      .catch((error) => console.log(error.message));
+  }, [persons]);
 
   const newContactNameHandler = (e) => setNewContactObj({ ...newContactObj, name: e.target.value });
 
@@ -63,7 +77,8 @@ function App() {
     // );
 
     /** *** This will search the persons array for an object with the same name only */
-    const itExists = persons.find((value) => value.name === newContactData.name);
+    const itExists = persons
+      .find((value) => value.name.toUpperCase() === newContactData.name.toUpperCase());
 
     if (newContactObj.name === '' || newContactObj.number === '') {
       let invalidInputMessage;
@@ -106,7 +121,8 @@ function App() {
       contactService
         .create(newContactData)
         .then((newContact) => {
-          setPersons(persons.concat(newContact));
+          // setPersons(persons.concat(newContact));
+          setPersons([newContact, ...persons]);
           setNewContactObj(cleanContact);
         })
         .then(() => {
@@ -117,9 +133,17 @@ function App() {
     return null;
   };
 
+  // Pagination
   const filteredPersonList = persons.filter(
     (person) => person.name.toUpperCase().includes(personsFilter.toUpperCase()),
   );
+  const indexOfLastContact = currentPage * contactsPerPage;
+  const indexOfFirstContact = indexOfLastContact - contactsPerPage;
+  const currentContacts = filteredPersonList.slice(indexOfFirstContact, indexOfLastContact);
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
 
   const deleteContactHandler = (id) => {
     const contactToDelete = persons.find((p) => p.id === id);
@@ -146,10 +170,31 @@ function App() {
     }
   };
 
+  const editContactHandler = (id) => {
+    // Find the contact to edit
+    const contactToEdit = persons.find((person) => person.id === id);
+
+    if (contactToEdit) {
+      // Populate newContactObj with the details of the contact to edit
+      setNewContactObj({
+        id: contactToEdit.id,
+        name: contactToEdit.name,
+        number: contactToEdit.number,
+      });
+    } else {
+      // Handle the case where the contact with the given id was not found
+      notifications('Contact not found', 'error');
+    }
+  };
+
   return (
     <div className="phonebook-app">
       <div className="title">
         <h1>Phonebook</h1>
+        <div>
+          {/* Render the HTML content using dangerouslySetInnerHTML */}
+          <div dangerouslySetInnerHTML={{ __html: contactCount }} />
+        </div>
         <Notification
           message={notification.message}
           status={notification.status}
@@ -168,11 +213,18 @@ function App() {
         </div>
         <div className="dashboard-right">
           <DisplayContacts
-            filteredPersonList={filteredPersonList}
             deleteContactHandler={deleteContactHandler}
+            editContactHandler={editContactHandler}
+            currentContacts={currentContacts}
           />
         </div>
       </div>
+      <Pagination
+        currentPage={currentPage}
+        contactsPerPage={contactsPerPage}
+        filteredPersonList={filteredPersonList}
+        handlePageChange={handlePageChange}
+      />
     </div>
   );
 }

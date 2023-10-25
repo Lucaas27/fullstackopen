@@ -12,7 +12,7 @@
   border-radius: 5px;
   padding: 5px;
   margin-bottom: 5px;
-  width: 50%;
+  /* width: 70%; */
   text-align: center;
 }
 
@@ -24,7 +24,7 @@
   border-radius: 5px;
   padding: 5px;
   margin-bottom: 5px;
-  width: 50%;
+  /* width: 70%; */
   text-align: center;
 }
 
@@ -44,7 +44,8 @@ h4 {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  padding: 2rem;
+  padding: 1rem;
+  align-items: center;
 }
 
 .title {
@@ -67,25 +68,29 @@ h4 {
   display: flex;
   justify-content: center;
   align-items: start;
+  width: 75%;
 }
+
 .dashboard-left {
-  border-right: 1px solid #ccc;
-  padding: 1rem;
+  padding:1rem;
 }
 .dashboard-right {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-gap: 10px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.dashboard-right:nth-child(even) .contact:last-child {
+  order:-1;
+}
+.dashboard-right .contact {
   padding: 2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 3rem;
+  border-bottom: 1px solid #ccc;
+  background-color: #cccccc1f;
 }
-.contact {
-  display: flex;
-  flex-direction: row;
-  gap: 2rem;
-  justify-content: center;
-  align-items: baseline;
-}
-.contact-name {
+.dashboard-right .contact-name {
   margin: 0;
   font-size: 1.2em;
   text-transform: capitalize;
@@ -96,9 +101,45 @@ button {
   background: #f8a035;
   color: #fff;
   border: none;
+  cursor: pointer;
+  border-radius: 3px;
 }
 
-@media only screen and (max-width: 650px) {
+.buttons{
+  display: flex;
+  gap: 1rem;
+}
+
+.delete{
+  background-color: rgba(255, 0, 0, 0.522);
+}
+
+.delete:hover{
+  background-color: rgba(255, 0, 0, 0.642);
+}
+
+.edit {
+  background-color: rgba(0, 0, 255, 0.39);
+}
+
+.edit:hover{
+  background-color: rgba(0, 0, 255, 0.642);
+
+}
+
+.pagination{
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  padding: 1rem;
+  /* margin: 2rem; */
+  justify-content: space-evenly;
+  width: 50%;
+  align-items: center;
+  
+}
+
+@media only screen and (max-width: 750px) {
   .dashboard {
     flex-direction: column;
   }
@@ -109,8 +150,6 @@ button {
 
   .dashboard-right {
     border-top: 1px solid #ccc;
-    justify-content: center;
-    align-items: baseline;
   }
 
   .contact {

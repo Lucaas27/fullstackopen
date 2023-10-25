@@ -9,14 +9,19 @@ const create = (newContact) => axios
   .then((newContactResponse) => newContactResponse.data);
 
 const update = (id, modifiedContact) => axios
-  .put(`${baseUrl}\\${id}`, modifiedContact)
+  .put(`${baseUrl}/${id}`, modifiedContact)
   .then((newContact) => newContact.data);
 
 const deleteContact = (id) => axios.delete(`${baseUrl}\\${id}`);
+
+const fetchContactCount = () => axios
+  .get(`${baseUrl}/${'info'}`)
+  .then((amount) => amount.data);
 
 export default {
   getAll,
   create,
   update,
   deleteContact,
+  fetchContactCount,
 };
