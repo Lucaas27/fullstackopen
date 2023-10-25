@@ -1,15 +1,22 @@
 import React from 'react';
 
-const DisplayContacts = ({
-  filteredPersonList, deleteContactHandler,
-}) => filteredPersonList.map((person) => (
-  <div className="contact" key={person.id}>
-    <h2 className="contact-name">{person.name}</h2>
-    <p>{person.number}</p>
-    <button type="button" onClick={() => deleteContactHandler(person.id)}>
-      Delete
-    </button>
-  </div>
-));
-
-export default DisplayContacts;
+export default function DisplayContacts({
+  deleteContactHandler,
+  editContactHandler,
+  currentContacts,
+}) {
+  return currentContacts.map((person) => (
+    <div className="contact" key={person.id}>
+      <h2 className="contact-name">{person.name}</h2>
+      <p>{person.number}</p>
+      <div className="buttons">
+        <button type="button" className="delete" onClick={() => deleteContactHandler(person.id)}>
+          Delete
+        </button>
+        <button type="button" className="edit" onClick={() => editContactHandler(person.id)}>
+          Edit
+        </button>
+      </div>
+    </div>
+  ));
+}

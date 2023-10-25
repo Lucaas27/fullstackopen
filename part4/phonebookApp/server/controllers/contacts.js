@@ -9,8 +9,7 @@ contactsRouter.get('/info', (request, response) => {
     timeStyle: 'full',
   });
   ContactModel.estimatedDocumentCount().then((count) => {
-    response.send(`<p>The phonebook has ${count} contacts <p/>
-        <p>Last sync: ${date}<p/>`);
+    response.send(`<p>The phonebook has ${count} contacts. Last sync'd: ${date} <p/>`);
   });
 });
 
