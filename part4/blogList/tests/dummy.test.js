@@ -1,4 +1,3 @@
-import { expect } from 'chai';
-import { dummy } from '../utils/for_testing.js';
+import { dummy } from '../utils/testing.js';
 
-it('returns 1', () => expect(dummy([])).to.equal(1));
+test('dummy', () => expect(dummy([])).toBe(1));
