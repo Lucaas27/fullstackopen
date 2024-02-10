@@ -1,6 +1,5 @@
 import express from 'express';
 import cors from 'cors';
-
 import mongoose from 'mongoose';
 import reqLogger from './utils/customMiddleware.js';
 import config from './utils/config.js';
