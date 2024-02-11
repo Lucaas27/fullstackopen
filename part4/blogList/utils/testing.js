@@ -38,9 +38,34 @@ const mostPosts = posts => {
     return author.posts === Math.max(...authors.map(author => author.posts));
   });
 
-  console.log(author);
+  // console.log(author);
 
   return author[0];
 };
 
-export { dummy, totalLikes, favouritePost, mostPosts };
+const mostLikes = posts => {
+  posts = Array.isArray(posts) ? posts : [posts];
+
+  const authors = posts.reduce((authors, currPost) => {
+    const AuthorIndex = authors.findIndex(author => author.name === currPost.author);
+
+    if (AuthorIndex === -1) {
+      authors.push({ name: currPost.author, likes: currPost.likes }); // Add author into array
+    } else {
+      authors[AuthorIndex].likes += currPost.likes; // Update the likes count
+    }
+
+    // console.log(authors);
+    return authors;
+  }, []);
+
+  const mostLiked = authors.filter(record => {
+    return record.likes === Math.max(...authors.map(record => record.likes));
+  });
+
+  // console.log(mostLiked);
+
+  return mostLiked[0];
+};
+
+export { dummy, totalLikes, favouritePost, mostPosts, mostLikes };
