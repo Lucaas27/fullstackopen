@@ -1,4 +1,5 @@
-import { average } from '../utils/for_testing.js';
+import { expect, test, describe } from 'vitest';
+import { average } from './helpers/testing.js';
 
 describe.skip('average', () => {
   test('of one value is the value itself', () => {

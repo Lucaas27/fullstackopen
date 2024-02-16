@@ -1,24 +1,10 @@
-import mongoose from 'mongoose';
+/* eslint-disable import/no-extraneous-dependencies */
+import { expect, test, describe } from 'vitest';
 import supertest from 'supertest';
 import app from '../app';
-import Note from '../models/note';
-import { initialNotes, notesInDB, nonExistingId } from './test_help.js';
+import { initialNotes, notesInDB, nonExistingId } from './helpers/helpers.js';
 
 const api = supertest(app);
-
-beforeEach(async () => {
-  await Note.deleteMany({});
-  console.log('DB cleared');
-
-  const noteObjs = initialNotes.map((n) => new Note(n));
-  const promiseArray = noteObjs.map((note) => {
-    console.log(`Saved note : ${note.content}`);
-    return note.save();
-  });
-  await Promise.all(promiseArray);
-
-  console.log('Done');
-});
 
 describe('When there are initial notes', () => {
   test('notes are returned as json', async () => {
@@ -30,14 +16,14 @@ describe('When there are initial notes', () => {
 
   test('all notes are returned', async () => {
     const res = await notesInDB();
-
+    console.log(JSON.stringify(res, null, 2));
     expect(res).toHaveLength(initialNotes.length);
   });
 
   test('a specific note is within the returned notes', async () => {
     const res = await notesInDB();
 
-    const contents = res.map((r) => r.content);
+    const contents = res.map((note) => note.content);
     expect(contents).toContain('Browser can execute only JavaScript');
   });
 });
@@ -47,7 +33,10 @@ describe('Viewing a specific note', () => {
     const notes = await notesInDB();
     const noteToView = notes[0];
 
-    const resultNote = await api.get(`/api/notes/${noteToView.id}`).expect(200).expect('Content-Type', /application\/json/);
+    const resultNote = await api
+      .get(`/api/notes/${noteToView.id}`)
+      .expect(200)
+      .expect('Content-Type', /application\/json/);
     expect(resultNote.body).toEqual(noteToView);
   });
 
@@ -70,7 +59,11 @@ test('a valid note can be added', async () => {
     important: true,
   };
 
-  await api.post('/api/notes').send(newNote).expect(201).expect('Content-Type', /application\/json/);
+  await api
+    .post('/api/notes')
+    .send(newNote)
+    .expect(201)
+    .expect('Content-Type', /application\/json/);
   const res = await notesInDB();
   const contents = res.map((r) => r.content);
 
@@ -100,8 +93,4 @@ test('a note can be deleted', async () => {
 
   const contents = notesAfterDeletion.map((r) => r.content);
   expect(contents).not.toContain(noteToDelete.content);
-});
-
-afterAll(async () => {
-  await mongoose.connection.close();
 });

@@ -1,4 +1,5 @@
-import { reverse } from '../utils/for_testing';
+import { expect, test, describe } from 'vitest';
+import { reverse } from './helpers/testing.js';
 
 describe.skip('reverse', () => {
   test('of "a"', () => {
